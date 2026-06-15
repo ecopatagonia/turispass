@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Mundial Pass · Activación</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif}
+html,body{width:100%;background:#f8f8f8;min-height:100vh}
+.screen{display:none}
+.screen.active{display:block}
+.error-screen{padding:40px 20px;text-align:center}
+.error-icon{font-size:48px;margin-bottom:16px}
+.error-title{color:#e05050;font-size:18px;font-weight:500;margin-bottom:8px}
+.error-sub{color:#aaa;font-size:13px;line-height:1.6}
+.act-hero{background:#003087;padding:28px 18px 32px;text-align:center}
+.act-icon{font-size:44px;margin-bottom:12px}
+.act-title{color:#fff;font-size:20px;font-weight:500;margin-bottom:6px}
+.act-sub{color:rgba(255,255,255,0.6);font-size:13px;line-height:1.6;margin-bottom:14px}
+.posada-badge{display:inline-flex;align-items:center;gap:5px;background:rgba(255,255,255,0.1);border:0.5px solid rgba(255,255,255,0.2);border-radius:50px;padding:6px 14px;color:rgba(255,255,255,0.75);font-size:11px}
+.act-body{padding:14px;display:flex;flex-direction:column;gap:10px}
+.card{background:#fff;border-radius:14px;border:0.5px solid #eee;padding:14px}
+.card-title{font-size:9px;color:#bbb;letter-spacing:2px;text-transform:uppercase;margin-bottom:10px}
+.dato-row{display:flex;align-items:center;justify-content:space-between;padding:8px 0;border-bottom:0.5px solid #f5f5f5}
+.dato-row:last-child{border-bottom:none;padding-bottom:0}
+.dato-lbl{font-size:13px;color:#aaa}
+.dato-val{font-size:14px;font-weight:500;color:#111;text-align:right}
+.cupon-dots{display:flex;gap:6px;margin-bottom:8px}
+.cupon-dot{width:34px;height:34px;border-radius:50%;background:#1d9e75;display:flex;align-items:center;justify-content:center;font-size:15px;color:#fff}
+.cupon-note{font-size:11px;color:#aaa;line-height:1.5}
+.regla{display:flex;align-items:flex-start;gap:12px;padding:10px 0;border-bottom:0.5px solid #f5f5f5}
+.regla:last-child{border-bottom:none;padding-bottom:0}
+.regla-icon{width:32px;height:32px;border-radius:8px;background:#e1f5ee;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0}
+.regla-titulo{font-size:13px;font-weight:500;color:#111;margin-bottom:3px}
+.regla-sub{font-size:11px;color:#aaa;line-height:1.4}
+.btn-activar{width:100%;background:#1d9e75;color:#fff;border:none;border-radius:12px;padding:16px;font-size:16px;font-weight:500;cursor:pointer;-webkit-tap-highlight-color:transparent}
+.btn-activar:active{background:#0f6e56;transform:scale(0.98)}
+.success-hero{background:#1d9e75;padding:28px 18px;text-align:center}
+.success-icon{font-size:44px;margin-bottom:10px}
+.success-title{color:#fff;font-size:20px;font-weight:500;margin-bottom:4px}
+.success-sub{color:rgba(255,255,255,0.75);font-size:13px;line-height:1.5}
+.id-box{background:rgba(255,255,255,0.15);border-radius:10px;padding:14px;margin-top:14px}
+.id-label{color:rgba(255,255,255,0.6);font-size:9px;letter-spacing:2px;text-transform:uppercase;margin-bottom:5px}
+.id-value{color:#fff;font-size:20px;font-weight:500;letter-spacing:3px;font-family:monospace}
+.success-body{padding:14px;display:flex;flex-direction:column;gap:10px}
+.btn-ir{width:100%;background:#003087;color:#fff;border:none;border-radius:12px;padding:16px;font-size:16px;font-weight:500;cursor:pointer}
+.btn-ir:active{background:#002070;transform:scale(0.98)}
+</style>
+</head>
+<body>
+
+<div class="screen" id="screenError">
+  <div class="error-screen">
+    <div class="error-icon">⚠️</div>
+    <div class="error-title">Link inválido</div>
+    <div class="error-sub">Este link no es válido o ya fue utilizado. Contactá a la recepción de tu posada.</div>
+  </div>
+</div>
+
+<div class="screen" id="screenActivar">
+  <div class="act-hero">
+    <div class="act-icon">👋</div>
+    <div class="act-title" id="actTitle">¡Hola!</div>
+    <div class="act-sub">Confirmamos tus datos y activás tus beneficios exclusivos con un toque.</div>
+    <div class="posada-badge">🏠 Posada del Sol</div>
+  </div>
+  <div class="act-body">
+    <div class="card">
+      <div class="card-title">Tus datos confirmados</div>
+      <div class="dato-row"><span class="dato-lbl">Nombre</span><span class="dato-val" id="dNombre"></span></div>
+      <div class="dato-row"><span class="dato-lbl">Habitación</span><span class="dato-val" id="dHab"></span></div>
+      <div class="dato-row"><span class="dato-lbl">Grupo</span><span class="dato-val" id="dPersonas"></span></div>
+      <div class="dato-row"><span class="dato-lbl">Check-in</span><span class="dato-val" id="dCheckin"></span></div>
+      <div class="dato-row"><span class="dato-lbl">Check-out</span><span class="dato-val" id="dCheckout"></span></div>
+      <div class="dato-row"><span class="dato-lbl">Nacionalidad</span><span class="dato-val" id="dNac"></span></div>
+    </div>
+    <div class="card">
+      <div class="card-title">Cupones disponibles por partido · 2</div>
+      <div class="cupon-dots">
+        <div class="cupon-dot">🎟</div>
+        <div class="cupon-dot">🎟</div>
+      </div>
+      <div class="cupon-note">Válidos para vos y tu grupo de habitación. No acumulables entre partidos.</div>
+    </div>
+    <div class="card">
+      <div class="card-title">Cómo usar tus beneficios</div>
+      <div class="regla">
+        <div class="regla-icon">📅</div>
+        <div><div class="regla-titulo">Solo el día del partido</div><div class="regla-sub">Los cupones se activan únicamente durante el evento y expiran al finalizar.</div></div>
+      </div>
+      <div class="regla">
+        <div class="regla-icon">🍺</div>
+        <div><div class="regla-titulo">Un cupón por restaurante</div><div class="regla-sub">No podés repetir el mismo local en el mismo día aunque tengas cupones disponibles.</div></div>
+      </div>
+      <div class="regla">
+        <div class="regla-icon">👥</div>
+        <div><div class="regla-titulo">Para tu grupo de habitación</div><div class="regla-sub">El beneficio aplica para todas las personas de tu habitación, no es transferible.</div></div>
+      </div>
+      <div class="regla">
+        <div class="regla-icon">✅</div>
+        <div><div class="regla-titulo">El mozo confirma el pase</div><div class="regla-sub">Mostrás el pase en pantalla, el mozo lo aprueba y recibís confirmación al instante.</div></div>
+      </div>
+    </div>
+    <button class="btn-activar" id="btnActivar" onclick="activar()">✓ Activar mis beneficios</button>
+  </div>
+</div>
+
+<div class="screen" id="screenSuccess">
+  <div class="success-hero">
+    <div class="success-icon">🎉</div>
+    <div class="success-title" id="successTitle">¡Todo listo!</div>
+    <div class="success-sub">Tus beneficios están activos. Ya podés elegir dónde ver los partidos.</div>
+    <div class="id-box">
+      <div class="id-label">Tu ID de huésped</div>
+      <div class="id-value" id="successId"></div>
+    </div>
+  </div>
+  <div class="success-body">
+    <div class="card">
+      <div class="card-title">Resumen</div>
+      <div class="dato-row"><span class="dato-lbl">Posada</span><span class="dato-val">Posada del Sol</span></div>
+      <div class="dato-row"><span class="dato-lbl">Habitación</span><span class="dato-val" id="resHab"></span></div>
+      <div class="dato-row"><span class="dato-lbl">Cupones</span><span class="dato-val">2 por partido</span></div>
+      <div class="dato-row"><span class="dato-lbl">Válido hasta</span><span class="dato-val" id="resCheckout"></span></div>
+    </div>
+    <button class="btn-ir" onclick="irATurista()">Ver partidos disponibles →</button>
+  </div>
+</div>
+
+<script>
+var API = "https://script.google.com/macros/s/AKfycbxE-czmXdXuq-FWmdeK0IKZpC8SEFcJ4qtrYvdDBTz31ansqghmZDQBuuPzQ3ymtXUM4Q/exec";
+var GITHUB_BASE = "https://ecopatagonia.github.io/turispass";
+
+var params = new URLSearchParams(window.location.search);
+var TOKEN = params.get("token") || "";
+var turistaData = null;
+
+window.addEventListener("load", async function() {
+  if (!TOKEN) { mostrarScreen("screenError"); return; }
+  try {
+    var res = await fetch(API + "?action=getTurista&token=" + encodeURIComponent(TOKEN));
+    var data = await res.json();
+    if (!data.ok) { mostrarScreen("screenError"); return; }
+    if (data.yaActivo) {
+      sessionStorage.setItem("turistaId", data.turista.id);
+      sessionStorage.setItem("turistaNombre", data.turista.nombre);
+      window.location.href = GITHUB_BASE + "/turista.html?tid=" + encodeURIComponent(data.turista.id) + "&nombre=" + encodeURIComponent(data.turista.nombre);
+      return;
+    }
+    turistaData = data.turista;
+    document.getElementById("actTitle").textContent = "¡Hola, " + data.turista.nombre.split(" ")[0] + "!";
+    document.getElementById("dNombre").textContent = data.turista.nombre;
+    document.getElementById("dHab").textContent = "Hab. " + data.turista.habitacion;
+    document.getElementById("dPersonas").textContent = data.turista.personas + " personas";
+    document.getElementById("dCheckin").textContent = fmtFecha(data.turista.checkin);
+    document.getElementById("dCheckout").textContent = fmtFecha(data.turista.checkout);
+    document.getElementById("dNac").textContent = data.turista.nacionalidad || "—";
+    mostrarScreen("screenActivar");
+  } catch(e) { mostrarScreen("screenError"); }
+});
+
+async function activar() {
+  var btn = document.getElementById("btnActivar");
+  btn.textContent = "Activando...";
+  btn.style.background = "#0f6e56";
+  try {
+    var res = await fetch(API + "?action=activarTurista&token=" + encodeURIComponent(TOKEN) + "&pin=0000");
+    var data = await res.json();
+    if (!data.ok) { btn.textContent = "✓ Activar mis beneficios"; btn.style.background = "#1d9e75"; alert(data.error); return; }
+    sessionStorage.setItem("turistaId", data.turistaId);
+    sessionStorage.setItem("turistaNombre", data.nombre);
+    document.getElementById("successTitle").textContent = "¡Todo listo, " + data.nombre.split(" ")[0] + "!";
+    document.getElementById("successId").textContent = data.turistaId;
+    document.getElementById("resHab").textContent = "Hab. " + turistaData.habitacion + " · " + turistaData.personas + " pers.";
+    document.getElementById("resCheckout").textContent = fmtFecha(turistaData.checkout);
+    mostrarScreen("screenSuccess");
+  } catch(e) { btn.textContent = "✓ Activar mis beneficios"; btn.style.background = "#1d9e75"; alert("Error de conexión."); }
+}
+
+function irATurista() {
+  var id = sessionStorage.getItem("turistaId") || "";
+  var nombre = sessionStorage.getItem("turistaNombre") || "";
+  window.location.href = GITHUB_BASE + "/turista.html?tid=" + encodeURIComponent(id) + "&nombre=" + encodeURIComponent(nombre);
+}
+
+function mostrarScreen(id) {
+  document.querySelectorAll(".screen").forEach(function(s) { s.classList.remove("active"); });
+  document.getElementById(id).classList.add("active");
+}
+
+function fmtFecha(f) {
+  if (!f) return "—";
+  try { return new Date(String(f).substring(0,10)+"T12:00").toLocaleDateString("es-AR",{day:"numeric",month:"short",year:"numeric"}); }
+  catch(e) { return f; }
+}
+</script>
+</body>
+</html>

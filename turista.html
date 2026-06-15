@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Mundial Pass · Beneficios</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif}
+html,body{width:100%;background:#f5f5f5;min-height:100vh}
+.header{background:#003087;padding:16px 18px 16px}
+.header-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
+.brand{color:#fff;font-size:18px;font-weight:500}
+.brand-sub{color:rgba(255,255,255,0.5);font-size:10px;letter-spacing:1.5px;text-transform:uppercase;margin-top:1px}
+.avatar{width:36px;height:36px;background:rgba(255,255,255,0.15);border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;font-size:13px;font-weight:500;border:0.5px solid rgba(255,255,255,0.25);flex-shrink:0}
+.bv-box{background:rgba(255,255,255,0.08);border-radius:12px;padding:14px 16px;display:flex;align-items:center;gap:12px}
+.bv-icon{font-size:30px;flex-shrink:0}
+.bv-title{color:#fff;font-size:17px;font-weight:500}
+.bv-sub{color:rgba(255,255,255,0.5);font-size:11px;margin-top:2px}
+.bv-badge{background:rgba(255,255,255,0.1);border:0.5px solid rgba(255,255,255,0.2);border-radius:50px;padding:5px 11px;color:rgba(255,255,255,0.75);font-size:10px;white-space:nowrap;margin-left:auto;flex-shrink:0}
+.back-btn{display:flex;align-items:center;gap:6px;color:rgba(255,255,255,0.65);font-size:13px;cursor:pointer;padding-bottom:10px}
+.back-btn:active{color:#fff}
+.match-strip{background:rgba(0,0,0,0.2);border-radius:10px 10px 0 0;padding:14px 16px;display:flex;align-items:center}
+.hero-side{flex:1}
+.hero-side.r{text-align:right}
+.team-flag{font-size:26px;display:block;margin-bottom:3px}
+.team-name{color:rgba(255,255,255,0.55);font-size:10px;letter-spacing:1.5px;text-transform:uppercase}
+.hero-center{text-align:center;padding:0 10px}
+.hero-vs{color:rgba(255,255,255,0.3);font-size:9px;letter-spacing:3px;display:block}
+.hero-hora{color:#fff;font-size:20px;font-weight:500;margin:3px 0}
+.hero-fecha{color:rgba(255,255,255,0.45);font-size:10px}
+.screen{display:none}
+.screen.active{display:block}
+.body{background:#f5f5f5;padding:14px}
+.sec-label{font-size:10px;color:#aaa;letter-spacing:2px;text-transform:uppercase;margin-bottom:12px;padding-left:2px}
+.partidos{display:flex;flex-direction:column;gap:10px}
+.partido-card{background:#fff;border-radius:14px;border:0.5px solid #e8e8e8;padding:18px 16px;display:flex;align-items:center;gap:14px;cursor:pointer;-webkit-tap-highlight-color:transparent}
+.partido-card:active{background:#f8f8f8}
+.partido-card.proximo{border:1.5px solid #1d9e75}
+.flags{font-size:28px;flex-shrink:0;display:flex;gap:2px}
+.partido-info{flex:1}
+.proximo-badge{background:#e1f5ee;color:#0f6e56;font-size:10px;font-weight:500;padding:3px 9px;border-radius:50px;display:inline-block;margin-bottom:6px;letter-spacing:0.5px}
+.partido-teams{font-size:17px;font-weight:500;color:#111;margin-bottom:4px}
+.partido-fecha{font-size:12px;color:#aaa;margin-bottom:8px}
+.partido-meta{display:flex;gap:6px;flex-wrap:wrap}
+.hora-pill{background:#e8f0fe;color:#185FA5;font-size:11px;font-weight:500;padding:4px 10px;border-radius:50px}
+.loc-pill{background:#e1f5ee;color:#0f6e56;font-size:11px;font-weight:500;padding:4px 10px;border-radius:50px}
+.arrow-ic{color:#ddd;font-size:20px;flex-shrink:0}
+.ed-cards{display:flex;flex-direction:column;gap:10px}
+.ed-card{background:#fff;border-radius:14px;border:0.5px solid #e8e8e8;overflow:hidden}
+.ed-img{height:80px;position:relative;overflow:hidden;display:flex;align-items:flex-end}
+.ed-img-bg{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:44px;opacity:0.2}
+.ed-img-overlay{position:relative;z-index:1;padding:8px 14px;width:100%;background:linear-gradient(transparent,rgba(0,20,60,0.85))}
+.ed-local-name{color:#fff;font-size:15px;font-weight:500}
+.ed-local-tipo{color:rgba(255,255,255,0.6);font-size:11px;margin-top:1px}
+.ed-body{padding:12px 14px}
+.ed-promo{background:#e1f5ee;border-radius:8px;padding:8px 12px;font-size:13px;font-weight:500;color:#0f6e56;margin-bottom:10px;line-height:1.4}
+.ed-footer{display:flex;align-items:center;justify-content:space-between;gap:8px}
+.ed-cupos{font-size:11px;color:#bbb}
+.ed-cupos.urgent{color:#c47a00;font-weight:500}
+.ed-btns{display:flex;gap:8px;flex-shrink:0}
+.btn-mapa{background:#f5f5f5;border:none;border-radius:8px;padding:8px 14px;font-size:12px;color:#888;cursor:pointer}
+.btn-mapa:active{background:#eee}
+.btn-pase{background:#1d9e75;color:#fff;border:none;border-radius:8px;padding:8px 16px;font-size:12px;font-weight:500;cursor:pointer}
+.btn-pase:active{background:#0f6e56}
+.btn-pase:disabled{background:#ccc;pointer-events:none}
+.conf-overlay{display:none;background:rgba(0,0,0,0.5);position:fixed;inset:0;align-items:flex-end;justify-content:center;z-index:100}
+.conf-overlay.open{display:flex}
+.conf-sheet{background:#fff;border-radius:20px 20px 0 0;padding:22px 20px 36px;width:100%}
+.conf-handle{width:36px;height:3px;background:#eee;border-radius:2px;margin:0 auto 18px}
+.conf-local{font-size:12px;color:#aaa;margin-bottom:4px}
+.conf-promo{font-size:18px;font-weight:500;color:#111;margin-bottom:10px}
+.conf-txt{font-size:13px;color:#888;margin-bottom:22px;line-height:1.6}
+.btn-si{width:100%;background:#1d9e75;color:#fff;border:none;border-radius:12px;padding:15px;font-size:15px;font-weight:500;cursor:pointer;margin-bottom:10px}
+.btn-si:active{background:#0f6e56}
+.btn-no{width:100%;background:transparent;border:0.5px solid #eee;color:#aaa;border-radius:12px;padding:14px;font-size:14px;cursor:pointer}
+.pase-overlay{display:none;background:rgba(0,0,0,0.5);position:fixed;inset:0;align-items:flex-end;justify-content:center;z-index:200}
+.pase-overlay.open{display:flex}
+.pase-sheet{background:#fff;border-radius:20px 20px 0 0;padding:22px 20px 36px;width:100%}
+.pase-handle{width:36px;height:3px;background:#eee;border-radius:2px;margin:0 auto 16px}
+.pase-tag{background:#e1f5ee;color:#0f6e56;font-size:11px;font-weight:500;padding:4px 12px;border-radius:50px;display:inline-block;margin-bottom:10px}
+.pase-promo{font-size:17px;font-weight:500;color:#111;margin-bottom:4px}
+.pase-desc{font-size:12px;color:#aaa;margin-bottom:16px;line-height:1.5}
+.pase-id-box{background:#003087;border-radius:14px;padding:22px;display:flex;flex-direction:column;align-items:center;gap:8px;margin-bottom:12px}
+.pase-id-label{color:rgba(255,255,255,0.5);font-size:10px;letter-spacing:2px;text-transform:uppercase}
+.pase-id-val{color:#fff;font-size:24px;font-weight:500;font-family:monospace;letter-spacing:4px}
+.pase-timer{background:#f5f5f5;border-radius:10px;padding:12px 16px;display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}
+.pase-timer-lbl{font-size:12px;color:#aaa}
+.pase-timer-val{font-size:17px;font-weight:500;color:#111}
+.pase-confirmado{display:none;background:#e1f5ee;border-radius:10px;padding:16px;text-align:center;margin-bottom:12px}
+.pase-confirmado.show{display:block}
+.pase-conf-txt{color:#0f6e56;font-size:15px;font-weight:500}
+.pase-conf-sub{color:#1d9e75;font-size:12px;margin-top:3px}
+.btn-cerrar{width:100%;background:transparent;border:0.5px solid #eee;color:#aaa;border-radius:10px;padding:13px;font-size:13px;cursor:pointer}
+.toast{display:none;position:fixed;bottom:28px;left:50%;transform:translateX(-50%);background:#111;border-radius:12px;padding:13px 22px;font-size:13px;color:#fff;z-index:999;max-width:88vw;text-align:center}
+.toast.show{display:block}
+</style>
+</head>
+<body>
+
+<div class="screen active" id="screenInicio">
+  <div class="header">
+    <div class="header-top">
+      <div><div class="brand">Mundial Pass</div><div class="brand-sub">beneficios exclusivos</div></div>
+      <div class="avatar" id="avatarTxt">?</div>
+    </div>
+    <div class="bv-box">
+      <div class="bv-icon">🏆</div>
+      <div>
+        <div class="bv-title" id="bvTitle">Bienvenido</div>
+        <div class="bv-sub">Tus beneficios exclusivos están activos</div>
+      </div>
+      <div class="bv-badge">🏠 Posada del Sol</div>
+    </div>
+  </div>
+  <div class="body">
+    <div class="sec-label">Partidos disponibles</div>
+    <div class="partidos" id="partidosList"></div>
+  </div>
+</div>
+
+<div class="screen" id="screenLocales">
+  <div class="header">
+    <div class="header-top">
+      <div><div class="brand">Mundial Pass</div><div class="brand-sub">beneficios exclusivos</div></div>
+      <div class="avatar" id="avatarTxt2">?</div>
+    </div>
+    <div class="back-btn" onclick="volverInicio()">← Elegir otro partido</div>
+    <div class="match-strip" id="matchStrip"></div>
+  </div>
+  <div class="body">
+    <div class="sec-label" id="localesLabel"></div>
+    <div class="ed-cards" id="edCards"></div>
+  </div>
+</div>
+
+<div class="conf-overlay" id="confOverlay">
+  <div class="conf-sheet">
+    <div class="conf-handle"></div>
+    <div class="conf-local" id="confLocal"></div>
+    <div class="conf-promo" id="confPromo"></div>
+    <div class="conf-txt">Vas a usar un cupón para esta promoción. ¿Querés continuar o preferís pensarlo mejor?</div>
+    <button class="btn-si" onclick="confirmarYEnviar()">Sí, quiero usar este cupón</button>
+    <button class="btn-no" onclick="cerrarConfirmacion()">Mejor lo pienso</button>
+  </div>
+</div>
+
+<div class="pase-overlay" id="paseOverlay">
+  <div class="pase-sheet">
+    <div class="pase-handle"></div>
+    <div class="pase-tag" id="paseTag"></div>
+    <div class="pase-promo" id="pasePromo"></div>
+    <div class="pase-desc">Mostrá este pase al llegar al local. El mozo lo va a confirmar.</div>
+    <div class="pase-id-box">
+      <div class="pase-id-label">Tu pase — mostrá al mozo</div>
+      <div class="pase-id-val" id="paseId"></div>
+    </div>
+    <div class="pase-timer">
+      <span class="pase-timer-lbl">Válido hasta</span>
+      <span class="pase-timer-val" id="paseTimer"></span>
+    </div>
+    <div class="pase-confirmado" id="paseConfirmado">
+      <div class="pase-conf-txt" id="paseConfTxt"></div>
+      <div class="pase-conf-sub" id="paseConfSub"></div>
+    </div>
+    <button class="btn-cerrar" onclick="cerrarPase()">Volver a locales</button>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+var API = "https://script.google.com/macros/s/AKfycbxE-czmXdXuq-FWmdeK0IKZpC8SEFcJ4qtrYvdDBTz31ansqghmZDQBuuPzQ3ymtXUM4Q/exec";
+var PARTIDOS_DATA = [{"id":"PART-001","eq1":"Argentina","eq2":"Panama","fecha":"2026-06-16","inicio":"18:00","hasta":"22:00","cupones":2,"nLocales":6},{"id":"PART-002","eq1":"Brasil","eq2":"Mexico","fecha":"2026-06-18","inicio":"21:00","hasta":"23:59","cupones":2,"nLocales":4}];
+
+// Leer datos desde URL
+var params = new URLSearchParams(window.location.search);
+var turistaId = params.get("tid") || sessionStorage.getItem("turistaId") || "";
+var turistaNombre = params.get("nombre") || sessionStorage.getItem("turistaNombre") || "";
+
+if (turistaId) {
+  sessionStorage.setItem("turistaId", turistaId);
+  sessionStorage.setItem("turistaNombre", turistaNombre);
+}
+
+var inicial = turistaNombre ? turistaNombre.charAt(0).toUpperCase() : "?";
+document.getElementById("avatarTxt").textContent = inicial;
+document.getElementById("avatarTxt2").textContent = inicial;
+if (turistaNombre) { document.getElementById("bvTitle").textContent = "Hola, " + turistaNombre.split(" ")[0]; }
+
+var partidoActivo = null;
+var localActivo = null;
+var pinActual = [];
+var pollingInterval = null;
+
+window.addEventListener("load", function() { renderPartidos(PARTIDOS_DATA); });
+
+function renderPartidos(partidos) {
+  var c = document.getElementById("partidosList");
+  c.innerHTML = "";
+  if (!partidos || !partidos.length) { c.innerHTML = '<div style="color:#aaa;font-size:14px;padding:12px 0">No hay partidos disponibles.</div>'; return; }
+  partidos.forEach(function(p, idx) {
+    var d = document.createElement("div");
+    var esProximo = idx === 0;
+    d.className = "partido-card" + (esProximo ? " proximo" : "");
+    var flags = getFlags(p.eq1, p.eq2);
+    var badge = esProximo ? '<div class="proximo-badge">PRÓXIMO</div>' : '';
+    d.innerHTML =
+      '<div class="flags">' + flags[0] + flags[1] + '</div>' +
+      '<div class="partido-info">' +
+        badge +
+        '<div class="partido-teams">' + p.eq1 + ' vs ' + p.eq2 + '</div>' +
+        '<div class="partido-fecha">' + fmtFecha(p.fecha) + '</div>' +
+        '<div class="partido-meta">' +
+          '<span class="hora-pill">⏱ ' + p.inicio + ' hs</span>' +
+          '<span class="loc-pill">📍 ' + p.nLocales + ' locales</span>' +
+        '</div>' +
+      '</div>' +
+      '<span class="arrow-ic">›</span>';
+    d.onclick = function() { elegirPartido(p); };
+    c.appendChild(d);
+  });
+}
+
+function elegirPartido(p) {
+  partidoActivo = p;
+  var flags = getFlags(p.eq1, p.eq2);
+  document.getElementById("matchStrip").innerHTML =
+    '<div class="hero-side"><span class="team-flag">' + flags[0] + '</span><span class="team-name">' + p.eq1 + '</span></div>' +
+    '<div class="hero-center"><span class="hero-vs">VS</span><div class="hero-hora">' + p.inicio + '</div><div class="hero-fecha">' + fmtFecha(p.fecha) + '</div></div>' +
+    '<div class="hero-side r"><span class="team-flag">' + flags[1] + '</span><span class="team-name">' + p.eq2 + '</span></div>';
+  document.getElementById("screenInicio").classList.remove("active");
+  document.getElementById("screenLocales").classList.add("active");
+  document.getElementById("localesLabel").textContent = "Dónde ver el partido";
+  document.getElementById("edCards").innerHTML = '<div style="color:#aaa;font-size:14px;padding:24px;text-align:center">Cargando locales...</div>';
+  fetch(API + "?action=getPromosPorPartido&partidoId=" + p.id)
+    .then(function(r) { return r.json(); })
+    .then(function(data) {
+      if (!data.ok || !data.locales.length) { document.getElementById("edCards").innerHTML = '<div style="color:#aaa;font-size:14px;padding:12px 0">Sin locales disponibles.</div>'; return; }
+      document.getElementById("localesLabel").textContent = "Dónde ver el partido · " + data.locales.length + " locales";
+      renderLocales(data.locales, data.partido);
+    })
+    .catch(function() { document.getElementById("edCards").innerHTML = '<div style="color:#e05050;font-size:14px">Error al cargar locales.</div>'; });
+}
+
+function renderLocales(locales, partido) {
+  var c = document.getElementById("edCards");
+  c.innerHTML = "";
+  var iconos = ["🍺","⚽","🥩","🍹","🌿","⚡","🎯","🍕"];
+  var bgs = ["#001428","#001c38","#001830","#001a30","#001228","#001628","#002030","#001520"];
+  locales.forEach(function(l, i) {
+    var d = document.createElement("div");
+    d.className = "ed-card";
+    var urg = l.cupos <= 3;
+    var cuposClass = urg ? "ed-cupos urgent" : "ed-cupos";
+    var cuposText = l.cupos + (urg ? " · últimos" : "") + " cupos";
+    var paseDisabled = l.cupos <= 0 ? "disabled" : "";
+    var localId = l.localId; var localNombre = l.nombre;
+    var promo = l.promo; var promoId = l.promoId;
+    var hasta = partido.hasta; var maps = l.maps;
+    d.innerHTML =
+      '<div class="ed-img" style="background:' + bgs[i%bgs.length] + '">' +
+        '<div class="ed-img-bg">' + iconos[i%iconos.length] + '</div>' +
+        '<div class="ed-img-overlay"><div class="ed-local-name">' + l.nombre + '</div><div class="ed-local-tipo">' + l.tipo + '</div></div>' +
+      '</div>' +
+      '<div class="ed-body">' +
+        '<div class="ed-promo">' + l.promo + '</div>' +
+        '<div class="ed-footer">' +
+          '<span class="' + cuposClass + '">' + cuposText + '</span>' +
+          '<div class="ed-btns"><button class="btn-mapa">📍 Mapa</button><button class="btn-pase" ' + paseDisabled + '>' + (l.cupos<=0?"Sin cupos":"Obtener pase →") + '</button></div>' +
+        '</div>' +
+      '</div>';
+    d.querySelector(".btn-mapa").addEventListener("click", function() { window.open(maps,"_blank"); });
+    d.querySelector(".btn-pase").addEventListener("click", function() { abrirConfirmacion(localId,localNombre,promo,promoId,hasta); });
+    c.appendChild(d);
+  });
+}
+
+function volverInicio() {
+  document.getElementById("screenLocales").classList.remove("active");
+  document.getElementById("screenInicio").classList.add("active");
+  partidoActivo = null;
+}
+
+function abrirConfirmacion(localId, localNombre, promo, promoId, hasta) {
+  if (!turistaId) { mostrarToast("Necesitás activar tu cuenta primero.", 3000); return; }
+  localActivo = {localId:localId,localNombre:localNombre,promo:promo,promoId:promoId,hasta:hasta};
+  document.getElementById("confLocal").textContent = localNombre;
+  document.getElementById("confPromo").textContent = promo;
+  document.getElementById("confOverlay").classList.add("open");
+}
+
+function cerrarConfirmacion() {
+  document.getElementById("confOverlay").classList.remove("open");
+  localActivo = null;
+}
+
+function confirmarYEnviar() {
+  document.getElementById("confOverlay").classList.remove("open");
+  pinActual = ["0","0","0","0"];
+  setTimeout(function() { confirmarPase(); }, 100);
+}
+
+function confirmarPase() {
+  var url = API + "?action=crearSolicitud&turistaId=" + encodeURIComponent(turistaId) +
+    "&localId=" + encodeURIComponent(localActivo.localId) +
+    "&partidoId=" + encodeURIComponent(partidoActivo.id) +
+    "&promoId=" + encodeURIComponent(localActivo.promoId) +
+    "&pin=" + pinActual.join("");
+  fetch(url)
+    .then(function(r) { return r.json(); })
+    .then(function(data) {
+      if (!data.ok) { mostrarToast(data.agotado ? data.mensaje : (data.error||"Error"), 4000); return; }
+      abrirPase(localActivo.localNombre, localActivo.promo, data.solicitudId, localActivo.hasta);
+      iniciarPolling(data.solicitudId);
+    })
+    .catch(function() { mostrarToast("Error de conexión", 3000); });
+}
+
+function abrirPase(nombre, promo, solicitudId, hasta) {
+  document.getElementById("paseTag").textContent = nombre;
+  document.getElementById("pasePromo").textContent = promo;
+  document.getElementById("paseId").textContent = solicitudId;
+  document.getElementById("paseTimer").textContent = hasta + " hs";
+  document.getElementById("paseConfirmado").classList.remove("show");
+  document.getElementById("paseOverlay").classList.add("open");
+}
+
+function cerrarPase() {
+  document.getElementById("paseOverlay").classList.remove("open");
+  if (pollingInterval) { clearInterval(pollingInterval); pollingInterval = null; }
+}
+
+function iniciarPolling(solicitudId) {
+  if (pollingInterval) clearInterval(pollingInterval);
+  pollingInterval = setInterval(function() {
+    fetch(API + "?action=getSolicitudes&localId=" + encodeURIComponent(localActivo.localId))
+      .then(function(r) { return r.json(); })
+      .then(function(data) {
+        if (!data.ok) return;
+        var sol = null;
+        for (var i=0;i<data.solicitudes.length;i++) { if (data.solicitudes[i].solicitudId===solicitudId) { sol=data.solicitudes[i]; break; } }
+        if (!sol) { clearInterval(pollingInterval); pollingInterval=null; mostrarConfirmacion(); }
+      }).catch(function(){});
+  }, 25000);
+}
+
+function mostrarConfirmacion() {
+  document.getElementById("paseConfTxt").textContent = turistaNombre.split(" ")[0] + ", ¡tu promoción ya está liberada!";
+  document.getElementById("paseConfSub").textContent = "El mozo confirmó tu pase. ¡Disfrutá!";
+  document.getElementById("paseConfirmado").classList.add("show");
+}
+
+function getFlags(eq1, eq2) {
+  var f={argentina:"🇦🇷",brasil:"🇧🇷",brazil:"🇧🇷",mexico:"🇲🇽",chile:"🇨🇱",uruguay:"🇺🇾",panama:"🇵🇦",ecuador:"🇪🇨",colombia:"🇨🇴",peru:"🇵🇪"};
+  return [f[eq1.toLowerCase()]||"🏴", f[eq2.toLowerCase()]||"🏴"];
+}
+
+function fmtFecha(f) {
+  if (!f) return "";
+  try { return new Date(String(f).substring(0,10)+"T12:00").toLocaleDateString("es-AR",{weekday:"short",day:"numeric",month:"short"}); }
+  catch(e) { return f; }
+}
+
+function mostrarToast(msg, dur) {
+  var t = document.getElementById("toast");
+  t.textContent = msg; t.classList.add("show");
+  setTimeout(function() { t.classList.remove("show"); }, dur||3000);
+}
+</script>
+</body>
+</html>
