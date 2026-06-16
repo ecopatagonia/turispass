@@ -433,6 +433,7 @@ async function guardarTurista() {
       document.getElementById("linkUrl").textContent = data.link;
       document.getElementById("linkBox").style.display = "flex";
       showToast("toastTurista", "Turista creado. Copiá el link y envialo.", "ok");
+      document.getElementById("btnNuevoT").style.display = "block";
     } else {
       showToast("toastTurista", "Datos actualizados correctamente.", "ok");
     }
