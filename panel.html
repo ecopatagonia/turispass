@@ -465,7 +465,7 @@ function renderLocales() {
   const c = document.getElementById("localesList"); c.innerHTML = "";
   localesCache.forEach(l => {
     const d = document.createElement("div"); d.className = "table-wrap"; d.style.marginBottom = "8px";
-    const act = String(l.Activo) === "TRUE";
+    const act = l.Activo === true || String(l.Activo).toUpperCase() === "TRUE";
     d.innerHTML = `<div class="table-row" style="grid-template-columns:1fr auto" onclick="editarLocal('${l.ID}')">
       <div><div class="t-name">${l.Nombre}</div><div class="t-sub">${l.Tipo} · PIN: ${l.PIN}</div></div>
       <span class="t-badge ${act?"ok":"off"}">${act?"Activo":"Inactivo"}</span>
