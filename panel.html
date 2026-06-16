@@ -197,8 +197,11 @@ body{background:#060f1a;min-height:100vh;display:flex;justify-content:center;pad
         <div class="field"><label>Dirección</label><input type="text" id="lDir" placeholder="Av. Corrientes 1234"/></div>
         <div class="field"><label>Link Google Maps</label><input type="text" id="lMaps" placeholder="https://maps.google.com/..."/></div>
         <div class="field"><label>PIN del local</label><input type="text" id="lPin" placeholder="4 dígitos" maxlength="4" inputmode="numeric"/></div>
+        <div class="checkbox-item" style="margin-bottom:10px">
+          <input type="checkbox" id="lActivo" checked/>
+          <label for="lActivo">Local activo <span class="cb-sub">Desmarcar para desactivar</span></label>
+        </div>
         <button class="btn-save" onclick="guardarLocal()">💾 <span id="btnLocalTxt">Guardar local</span></button>
-        <button class="btn-danger" id="btnToggleLocal" style="display:none" onclick="toggleLocal()">⏻ <span id="btnToggleTxt">Desactivar local</span></button>
         <button class="btn-secondary" id="btnNuevoL" style="display:none" onclick="nuevoLocal()">+ Nuevo local</button>
         <div class="toast-inline ok" id="toastLocal"></div>
       </div>
@@ -477,24 +480,23 @@ function editarLocal(id) {
   localEditId = id;
   document.getElementById("lNombre").value = l.Nombre || "";
   document.getElementById("lTipo").value = l.Tipo || "";
-  document.getElementById("lDir").value = l.Dirección || "";
+  document.getElementById("lDir").value = l["Dirección"] || l.Dirección || "";
   document.getElementById("lMaps").value = l.MapsURL || "";
   document.getElementById("lPin").value = l.PIN || "";
+  document.getElementById("lActivo").checked = String(l.Activo) === "TRUE";
   document.getElementById("lFormTitle").textContent = "Editando local";
   document.getElementById("lEditTag").style.display = "inline";
   document.getElementById("btnLocalTxt").textContent = "Guardar cambios";
-  document.getElementById("btnToggleLocal").style.display = "flex";
-  document.getElementById("btnToggleTxt").textContent = String(l.Activo) === "TRUE" ? "Desactivar local" : "Activar local";
   document.getElementById("btnNuevoL").style.display = "block";
 }
 
 function nuevoLocal() {
   localEditId = null;
   ["lNombre","lTipo","lDir","lMaps","lPin"].forEach(id => document.getElementById(id).value = "");
+  document.getElementById("lActivo").checked = true;
   document.getElementById("lFormTitle").textContent = "Nuevo local";
   document.getElementById("lEditTag").style.display = "none";
   document.getElementById("btnLocalTxt").textContent = "Guardar local";
-  document.getElementById("btnToggleLocal").style.display = "none";
   document.getElementById("btnNuevoL").style.display = "none";
 }
 
@@ -505,22 +507,13 @@ async function guardarLocal() {
   try {
     const params = {
       action:"guardarLocal", nombre, tipo: document.getElementById("lTipo").value,
-      dir: document.getElementById("lDir").value, maps: document.getElementById("lMaps").value, pin
+      dir: document.getElementById("lDir").value, maps: document.getElementById("lMaps").value,
+      pin, activo: document.getElementById("lActivo").checked ? "TRUE" : "FALSE"
     };
     if (localEditId) params.id = localEditId;
     const data = await api(params);
     if (!data.ok) { showToast("toastLocal", data.error, "err"); return; }
     showToast("toastLocal", localEditId ? "Local actualizado." : "Local guardado.", "ok");
-    nuevoLocal(); cargarLocales();
-  } catch(e) { showToast("toastLocal", "Error de conexión.", "err"); }
-}
-
-async function toggleLocal() {
-  if (!localEditId) return;
-  try {
-    const data = await api({action:"toggleLocal", localId: localEditId});
-    if (!data.ok) { showToast("toastLocal", data.error, "err"); return; }
-    showToast("toastLocal", data.activo ? "Local activado." : "Local desactivado.", "ok");
     nuevoLocal(); cargarLocales();
   } catch(e) { showToast("toastLocal", "Error de conexión.", "err"); }
 }
