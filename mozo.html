@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Mundial Pass · Validación</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif}
+html,body{width:100%;background:#f5f5f5;min-height:100vh}
+.header{background:#003087;padding:16px 18px;display:flex;align-items:center;justify-content:space-between}
+.brand{color:#fff;font-size:18px;font-weight:500}
+.brand-sub{color:rgba(255,255,255,0.5);font-size:10px;letter-spacing:1.5px;text-transform:uppercase;margin-top:1px}
+.local-badge{background:rgba(255,255,255,0.12);border:0.5px solid rgba(255,255,255,0.2);border-radius:50px;padding:6px 14px;color:#fff;font-size:12px;font-weight:500}
+.screen{display:none}
+.screen.active{display:block}
+.login-body{padding:32px 20px}
+.login-icon{font-size:48px;text-align:center;margin-bottom:16px}
+.login-title{color:#111;font-size:20px;font-weight:500;margin-bottom:6px;text-align:center}
+.login-sub{color:#aaa;font-size:13px;margin-bottom:24px;line-height:1.5;text-align:center}
+.field{margin-bottom:12px}
+.field label{display:block;font-size:10px;color:#aaa;letter-spacing:1px;text-transform:uppercase;margin-bottom:6px}
+.field input{width:100%;background:#fff;border:0.5px solid #e8e8e8;border-radius:10px;padding:13px 14px;color:#111;font-size:15px;outline:none;-webkit-appearance:none}
+.field input:focus{border-color:#003087}
+.field input::placeholder{color:#ccc}
+.btn-login{width:100%;background:#003087;color:#fff;border:none;border-radius:12px;padding:14px;font-size:15px;font-weight:500;cursor:pointer;margin-top:8px}
+.btn-login:active{background:#002070}
+.login-hint{font-size:11px;color:#ccc;text-align:center;margin-top:16px}
+.login-error{background:#fff0f0;border:0.5px solid #ffcccc;border-radius:8px;padding:10px 14px;color:#e05050;font-size:13px;margin-top:10px;text-align:center;display:none}
+.login-error.show{display:block}
+.mozo-body{padding:14px;display:flex;flex-direction:column;gap:10px}
+.status-bar{background:#fff;border-radius:12px;border:0.5px solid #e8e8e8;padding:12px 14px;display:flex;align-items:center;justify-content:space-between}
+.status-local{font-size:14px;font-weight:500;color:#111}
+.status-sub{font-size:11px;color:#aaa;margin-top:2px}
+.btn-refresh{background:#f5f5f5;border:none;border-radius:8px;padding:8px 14px;color:#888;font-size:12px;cursor:pointer;font-weight:500}
+.btn-refresh:active{background:#eee}
+.metricas{background:#fff;border-radius:12px;border:0.5px solid #e8e8e8;padding:14px}
+.metricas-title{font-size:9px;color:#bbb;letter-spacing:2px;text-transform:uppercase;margin-bottom:10px}
+.metricas-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px}
+.metrica{background:#f5f5f5;border-radius:10px;padding:12px}
+.metrica-val{font-size:24px;font-weight:500;color:#111}
+.metrica-lbl{font-size:11px;color:#aaa;margin-top:2px}
+.canjes-lista{display:flex;flex-direction:column;gap:6px}
+.canje-row{background:#f5f5f5;border-radius:8px;padding:10px 12px;display:flex;align-items:center;justify-content:space-between}
+.canje-nombre{font-size:13px;font-weight:500;color:#111}
+.canje-det{font-size:11px;color:#aaa;margin-top:1px}
+.canje-hora{font-size:13px;color:#003087;font-weight:500}
+.no-canjes{font-size:13px;color:#bbb;text-align:center;padding:10px 0}
+.sec-label{font-size:9px;color:#bbb;letter-spacing:2px;text-transform:uppercase;padding-left:2px}
+.empty-state{background:#fff;border-radius:12px;border:0.5px solid #e8e8e8;padding:32px 18px;text-align:center}
+.empty-icon{font-size:36px;margin-bottom:10px}
+.empty-txt{color:#bbb;font-size:13px;line-height:1.6}
+.solicitud-card{background:#fff;border-radius:14px;border:0.5px solid #e8e8e8;overflow:hidden;margin-bottom:10px}
+.sol-header{background:#f8f8f8;padding:14px;display:flex;align-items:center;gap:10px}
+.sol-avatar{width:42px;height:42px;background:#003087;border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;font-size:16px;font-weight:500;flex-shrink:0}
+.sol-nombre{color:#111;font-size:15px;font-weight:500}
+.sol-hora{color:#aaa;font-size:11px;margin-top:2px}
+.sol-promo-box{padding:14px;border-top:0.5px solid #f0f0f0}
+.sol-promo-lbl{font-size:9px;color:#bbb;letter-spacing:2px;text-transform:uppercase;margin-bottom:5px}
+.sol-promo-txt{color:#111;font-size:15px;font-weight:500}
+.sol-cupon-info{font-size:11px;color:#aaa;margin-top:3px}
+.sol-actions{padding:10px 14px 14px;display:flex;gap:8px}
+.btn-confirmar{flex:1;background:#1d9e75;color:#fff;border:none;border-radius:10px;padding:13px;font-size:14px;font-weight:500;cursor:pointer}
+.btn-confirmar:active{background:#0f6e56}
+.btn-rechazar{flex:0 0 48px;background:#f5f5f5;border:none;border-radius:10px;padding:13px;cursor:pointer;color:#bbb;font-size:18px}
+.btn-rechazar:active{background:#ffe0e0;color:#e05050}
+.toast-result{display:none;background:#fff;border-radius:14px;border:0.5px solid #e8e8e8;padding:20px;text-align:center}
+.toast-result.ok{border-color:#b8e6d3;background:#f0faf6}
+.toast-result.show{display:block}
+.toast-icon{font-size:32px;margin-bottom:8px}
+.toast-msg{font-size:15px;font-weight:500;color:#0f6e56;line-height:1.5}
+.toast-detail{font-size:12px;color:#aaa;margin-top:4px}
+.btn-logout{width:100%;background:transparent;border:0.5px solid #e8e8e8;color:#bbb;border-radius:10px;padding:12px;font-size:13px;cursor:pointer;margin-top:4px}
+.btn-logout:active{border-color:#ffcccc;color:#e05050}
+</style>
+</head>
+<body>
+
+<div class="screen active" id="screenLogin">
+  <div class="header">
+    <div><div class="brand">Mundial Pass</div><div class="brand-sub">panel de validación</div></div>
+  </div>
+  <div class="login-body">
+    <div class="login-icon">🔐</div>
+    <div class="login-title">Ingreso del local</div>
+    <div class="login-sub">Ingresá las credenciales de tu restaurante para acceder al panel.</div>
+    <div class="field">
+      <label>ID del local</label>
+      <input type="text" id="inputId" placeholder="Ej: LOCAL-01" autocomplete="off" autocapitalize="characters"/>
+    </div>
+    <div class="field">
+      <label>PIN</label>
+      <input type="password" id="inputPin" placeholder="••••" maxlength="4" inputmode="numeric"/>
+    </div>
+    <button class="btn-login" onclick="hacerLogin()">Ingresar</button>
+    <div class="login-error" id="loginError"></div>
+    <div class="login-hint">Credenciales provistas por Mundial Pass</div>
+  </div>
+</div>
+
+<div class="screen" id="screenMozo">
+  <div class="header">
+    <div><div class="brand">Mundial Pass</div><div class="brand-sub">validación</div></div>
+    <div class="local-badge" id="localBadge"></div>
+  </div>
+  <div class="mozo-body">
+    <div class="status-bar">
+      <div>
+        <div class="status-local" id="statusLocal"></div>
+        <div class="status-sub">Panel de validación</div>
+      </div>
+      <button class="btn-refresh" onclick="refrescar()">↻ Actualizar</button>
+    </div>
+    <div class="metricas" id="metricasWrap" style="display:none">
+      <div class="metricas-title">Actividad de hoy</div>
+      <div class="metricas-grid">
+        <div class="metrica"><div class="metrica-val" id="metCanjes">0</div><div class="metrica-lbl">Canjes confirmados</div></div>
+        <div class="metrica"><div class="metrica-val" id="metPersonas">0</div><div class="metrica-lbl">Personas atendidas</div></div>
+      </div>
+      <div class="canjes-lista" id="canjesLista"></div>
+    </div>
+    <div class="sec-label">Solicitudes pendientes</div>
+    <div id="solicitudesWrap"></div>
+    <div class="toast-result" id="toastResult">
+      <div class="toast-icon" id="toastIcon"></div>
+      <div class="toast-msg" id="toastMsg"></div>
+      <div class="toast-detail" id="toastDetail"></div>
+    </div>
+    <button class="btn-logout" onclick="cerrarSesion()">Cerrar sesión</button>
+  </div>
+</div>
+
+<script>
+var API = "https://script.google.com/macros/s/AKfycbxE-czmXdXuq-FWmdeK0IKZpC8SEFcJ4qtrYvdDBTz31ansqghmZDQBuuPzQ3ymtXUM4Q/exec";
+var localActivo = null;
+var pollingInterval = null;
+
+async function hacerLogin() {
+  var localId = document.getElementById("inputId").value.trim().toUpperCase();
+  var pin = document.getElementById("inputPin").value.trim();
+  var err = document.getElementById("loginError");
+  err.classList.remove("show");
+  if (!localId || !pin) { err.textContent = "Completá ID y PIN."; err.classList.add("show"); return; }
+  var btn = document.querySelector(".btn-login");
+  btn.textContent = "Verificando..."; btn.disabled = true;
+  try {
+    var res = await fetch(API + "?action=loginLocal&localId=" + encodeURIComponent(localId) + "&pin=" + encodeURIComponent(pin));
+    var data = await res.json();
+    btn.textContent = "Ingresar"; btn.disabled = false;
+    if (!data.ok) { err.textContent = data.error || "Credenciales incorrectas."; err.classList.add("show"); return; }
+    localActivo = data.local;
+    document.getElementById("localBadge").textContent = data.local.nombre;
+    document.getElementById("statusLocal").textContent = data.local.nombre;
+    sessionStorage.setItem("localId", data.local.id);
+    sessionStorage.setItem("localNombre", data.local.nombre);
+    mostrarScreen("screenMozo");
+    cargarTodo();
+    iniciarPolling();
+  } catch(e) { btn.textContent = "Ingresar"; btn.disabled = false; err.textContent = "Error de conexión."; err.classList.add("show"); }
+}
+
+async function cargarTodo() {
+  await Promise.all([cargarSolicitudes(), cargarMetricas()]);
+}
+
+async function cargarMetricas() {
+  try {
+    var res = await fetch(API + "?action=getCanjesLocal&localId=" + encodeURIComponent(localActivo.id));
+    var data = await res.json();
+    if (!data.ok) return;
+    document.getElementById("metCanjes").textContent = data.totalCanjes;
+    document.getElementById("metPersonas").textContent = data.totalPersonas;
+    var lista = document.getElementById("canjesLista");
+    lista.innerHTML = "";
+    if (!data.canjes.length) {
+      lista.innerHTML = '<div class="no-canjes">Sin canjes confirmados hoy.</div>';
+    } else {
+      data.canjes.forEach(function(c) {
+        var d = document.createElement("div");
+        d.className = "canje-row";
+        d.innerHTML = '<div><div class="canje-nombre">' + c.nombre + '</div><div class="canje-det">Hab. ' + c.habitacion + ' · ' + c.personas + ' pers.</div></div><div class="canje-hora">' + c.hora + ' hs</div>';
+        lista.appendChild(d);
+      });
+    }
+    document.getElementById("metricasWrap").style.display = "block";
+  } catch(e) {}
+}
+
+async function cargarSolicitudes() {
+  var wrap = document.getElementById("solicitudesWrap");
+  wrap.innerHTML = '<div style="color:#bbb;font-size:13px;padding:20px;text-align:center">Verificando solicitudes...</div>';
+  document.getElementById("toastResult").className = "toast-result";
+  try {
+    var res = await fetch(API + "?action=getSolicitudes&localId=" + encodeURIComponent(localActivo.id));
+    var data = await res.json();
+    if (!data.ok) { wrap.innerHTML = '<div style="color:#e05050;font-size:13px;padding:12px 0">Error al cargar.</div>'; return; }
+    renderSolicitudes(data.solicitudes);
+  } catch(e) { wrap.innerHTML = '<div style="color:#e05050;font-size:13px;padding:12px 0">Error de conexión.</div>'; }
+}
+
+function renderSolicitudes(solicitudes) {
+  var wrap = document.getElementById("solicitudesWrap");
+  wrap.innerHTML = "";
+  if (!solicitudes.length) {
+    wrap.innerHTML = '<div class="empty-state"><div class="empty-icon">📭</div><div class="empty-txt">Sin solicitudes pendientes.<br>Tocá Actualizar para verificar.</div></div>';
+    return;
+  }
+  solicitudes.forEach(function(s) {
+    var d = document.createElement("div");
+    d.className = "solicitud-card";
+    var inicial = s.nombre ? s.nombre[0].toUpperCase() : "?";
+    d.innerHTML =
+      '<div class="sol-header"><div class="sol-avatar">' + inicial + '</div>' +
+      '<div><div class="sol-nombre">' + s.nombre + '</div><div class="sol-hora">Hab. ' + s.habitacion + ' · ' + s.personas + ' pers. · ' + s.hora + ' hs</div></div></div>' +
+      '<div class="sol-promo-box"><div class="sol-promo-lbl">Promoción solicitada</div><div class="sol-promo-txt">' + s.promo + '</div><div class="sol-cupon-info">Cupón ' + s.cuponActual + ' de ' + s.cupoMax + ' para este partido</div></div>' +
+      '<div class="sol-actions"><button class="btn-confirmar">✓ Confirmar promoción</button><button class="btn-rechazar">✕</button></div>';
+    d.querySelector(".btn-confirmar").addEventListener("click", function() { confirmar(s.solicitudId, s.nombre, s.promo); });
+    d.querySelector(".btn-rechazar").addEventListener("click", function() { rechazar(s.solicitudId); });
+    wrap.appendChild(d);
+  });
+}
+
+async function confirmar(solicitudId, nombre, promo) {
+  try {
+    var res = await fetch(API + "?action=confirmarSolicitud&solicitudId=" + encodeURIComponent(solicitudId) + "&localId=" + encodeURIComponent(localActivo.id));
+    var data = await res.json();
+    if (!data.ok) { alert(data.error); return; }
+    document.getElementById("solicitudesWrap").innerHTML = "";
+    var toast = document.getElementById("toastResult");
+    toast.className = "toast-result ok show";
+    document.getElementById("toastIcon").textContent = "✅";
+    document.getElementById("toastMsg").textContent = data.mensaje || nombre.split(" ")[0] + ", tu promoción ya está liberada.";
+    document.getElementById("toastDetail").textContent = promo + " · " + data.hora + " hs";
+    cargarMetricas();
+    setTimeout(function() { toast.className = "toast-result"; cargarSolicitudes(); }, 4000);
+  } catch(e) { alert("Error de conexión."); }
+}
+
+async function rechazar(solicitudId) {
+  if (!confirm("¿Rechazar esta solicitud?")) return;
+  try {
+    var res = await fetch(API + "?action=rechazarSolicitud&solicitudId=" + encodeURIComponent(solicitudId) + "&localId=" + encodeURIComponent(localActivo.id));
+    var data = await res.json();
+    if (!data.ok) { alert(data.error); return; }
+    cargarSolicitudes();
+  } catch(e) { alert("Error de conexión."); }
+}
+
+function refrescar() { cargarTodo(); }
+
+function iniciarPolling() {
+  if (pollingInterval) clearInterval(pollingInterval);
+  pollingInterval = setInterval(cargarTodo, 25000);
+}
+
+function cerrarSesion() {
+  if (pollingInterval) clearInterval(pollingInterval);
+  localActivo = null;
+  sessionStorage.removeItem("localId");
+  sessionStorage.removeItem("localNombre");
+  mostrarScreen("screenLogin");
+}
+
+function mostrarScreen(id) {
+  document.querySelectorAll(".screen").forEach(function(s) { s.classList.remove("active"); });
+  document.getElementById(id).classList.add("active");
+}
+
+window.addEventListener("load", function() {
+  var savedId = sessionStorage.getItem("localId");
+  var savedNombre = sessionStorage.getItem("localNombre");
+  if (savedId && savedNombre) {
+    localActivo = {id: savedId, nombre: savedNombre};
+    document.getElementById("localBadge").textContent = savedNombre;
+    document.getElementById("statusLocal").textContent = savedNombre;
+    mostrarScreen("screenMozo");
+    cargarTodo();
+    iniciarPolling();
+  }
+});
+</script>
+</body>
+</html>
